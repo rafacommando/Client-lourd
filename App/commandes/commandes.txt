@@ -1,0 +1,7 @@
+sphinx-quickstart.exe
+
+App\doc\make.bat html
+
+App\doc\make.bat clean html
+
+sphinx-apidoc.exe -o .\source\ ..\..\App\
