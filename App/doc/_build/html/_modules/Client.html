@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client &mdash; Documentation Cash-Cash 1.0.0</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Cash-Cash
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">App</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Cash-Cash</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Code du module</a> &raquo;</li>
+      <li>Client</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Code source de Client</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../Client.html#Client.Client">[docs]</a><span></span><span class="k">class</span> <span class="nc">Client</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    num_client : chaine \n</span>
+<span class="sd">    raison_sociale : chaîne \n</span>
+<span class="sd">    siren : chaîne \n</span>
+<span class="sd">    code_ape : chaîne \n</span>
+<span class="sd">    adresse : chaîne \n</span>
+<span class="sd">    tel_client : chaîne \n</span>
+<span class="sd">    email : chaîne \n</span>
+<span class="sd">    duree_deplacement : entier \n</span>
+<span class="sd">    distance_km : entier \n</span>
+<span class="sd">    Numero_Agence : string \n </span>
+<span class="sd">    les_materiels : Collection de &lt;Materiel&gt;  (Tous les matériels du client.) \n</span>
+<span class="sd">    le_contrat : ContratMaintenance (peut être nul si le client ne possède pas de contrat)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_client</span><span class="p">,</span> <span class="n">raison_sociale</span><span class="p">,</span> <span class="n">siren</span><span class="p">,</span> <span class="n">code_ape</span><span class="p">,</span> <span class="n">adresse</span><span class="p">,</span> <span class="n">tel_client</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">duree_deplacement</span><span class="p">,</span> <span class="n">distance_km</span><span class="p">,</span> <span class="n">Numero_Agence</span><span class="p">,</span> <span class="n">les_materiels</span><span class="p">,</span> <span class="n">le_contrat</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_client</span> <span class="o">=</span> <span class="n">num_client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raison_sociale</span> <span class="o">=</span> <span class="n">raison_sociale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">siren</span> <span class="o">=</span> <span class="n">siren</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">code_ape</span> <span class="o">=</span> <span class="n">code_ape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adresse</span> <span class="o">=</span> <span class="n">adresse</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tel_client</span> <span class="o">=</span> <span class="n">tel_client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duree_deplacement</span> <span class="o">=</span> <span class="n">duree_deplacement</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distance_km</span> <span class="o">=</span> <span class="n">distance_km</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Numero_Agence</span> <span class="o">=</span> <span class="n">Numero_Agence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">les_materiels</span> <span class="o">=</span> <span class="n">les_materiels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">le_contrat</span> <span class="o">=</span> <span class="n">le_contrat</span>
+        
+<div class="viewcode-block" id="Client.getMateriels"><a class="viewcode-back" href="../Client.html#Client.Client.getMateriels">[docs]</a>    <span class="k">def</span> <span class="nf">getMateriels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retourne l&#39;ensemble des matériels du client</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">les_materiels</span></div>
+        
+        
+<div class="viewcode-block" id="Client.getMaterielsSousContrat"><a class="viewcode-back" href="../Client.html#Client.Client.getMaterielsSousContrat">[docs]</a>    <span class="k">def</span> <span class="nf">getMaterielsSousContrat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retourne l&#39;ensemble des matériels pour lesquels le client a souscrit un contrat de maintenance qui est encore valide (la date du jour est entre la date de signature et la date d’échéance)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">liste</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">les_materiels</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">liste</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">liste</span></div>
+        
+<div class="viewcode-block" id="Client.estAssure"><a class="viewcode-back" href="../Client.html#Client.Client.estAssure">[docs]</a>    <span class="k">def</span> <span class="nf">estAssure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retourne vrai si le client est assuré, faux sinon</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMaterielsSousContrat</span><span class="p">())</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMateriels</span><span class="p">()):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div></div>
+        
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kevin COUTURIER.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

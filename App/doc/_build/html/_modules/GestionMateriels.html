@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GestionMateriels &mdash; Documentation Cash-Cash 1.0.0</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Cash-Cash
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">App</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Cash-Cash</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Code du module</a> &raquo;</li>
+      <li>GestionMateriels</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Code source de GestionMateriels</h1><div class="highlight"><pre>
+<span></span><span class="c1"># fonction statique XmlClientValide (xml : chaine) : booleen</span>
+<span class="c1"># // Retourne un booléen Vrai si le fichier xml respecte la DTD référencée</span>
+<span class="c1"># dans le fichier XML, Faux sinon</span>
+<span class="kn">import</span> <span class="nn">PersistanceSQL</span><span class="o">,</span> <span class="nn">Materiels</span><span class="o">,</span> <span class="nn">TypeMateriel</span><span class="o">,</span> <span class="nn">ContratMaintenance</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">import</span> <span class="n">tostring</span>
+<span class="kn">import</span> <span class="nn">xml.dom.minidom</span>
+
+
+<span class="c1"># On creer la classe GestionMateriels</span>
+<div class="viewcode-block" id="GestionMateriels"><a class="viewcode-back" href="../GestionMateriels.html#GestionMateriels.GestionMateriels">[docs]</a><span class="k">class</span> <span class="nc">GestionMateriels</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    donnees : PersistanceSQL (Attribut qui permet de rendre les objets métiers accessibles.)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">donnees</span>
+    <span class="n">donnees</span> <span class="o">=</span> <span class="n">PersistanceSQL</span><span class="o">.</span><span class="n">PersistanceSQL</span><span class="p">(</span><span class="s1">&#39;mysql-cashcash.alwaysdata.net&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39; cashcash_cashcash&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Constructeur de la classe GestionMateriels</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">les_donnees</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construit un objet GestionMateriels avec un modèle de persistance associé.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">les_donnees</span> <span class="o">=</span> <span class="n">les_donnees</span>
+
+    <span class="c1"># Retourne l&#39;objet Distributeur qui possède l&#39;identifiant idDistributeur passé en paramètre, retourne null si aucun Distributeur ne possède cet identifiant.</span>
+<div class="viewcode-block" id="GestionMateriels.getClient"><a class="viewcode-back" href="../GestionMateriels.html#GestionMateriels.GestionMateriels.getClient">[docs]</a>    <span class="k">def</span> <span class="nf">getClient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_client</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retourne l&#39;objet Distributeur qui possède l&#39;identifiant id_client passé en paramètre, retourne null si aucun client ne possède cet identifiant.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Si les donnees chargee avec l&#39;id_client en paramettre de la methode ne renvois pas None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">les_donnees</span><span class="o">.</span><span class="n">chargerDepuisBase</span><span class="p">(</span><span class="n">id_client</span><span class="p">,</span> <span class="s1">&#39;Client&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="c1"># On recupere les donnees du client </span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">les_donnees</span><span class="o">.</span><span class="n">chargerDepuisBase</span><span class="p">(</span><span class="n">id_client</span><span class="p">,</span> <span class="s1">&#39;Client&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="c1"># Sinon on retourne None </span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+            
+
+    <span class="c1"># Retourne une chaîne de caractères qui représente le document XML de la liste des matériels du client passé en paramètre comme le montre l&#39;exemple de l&#39;annexe</span>
+<div class="viewcode-block" id="GestionMateriels.XmlClient"><a class="viewcode-back" href="../GestionMateriels.html#GestionMateriels.GestionMateriels.XmlClient">[docs]</a>    <span class="k">def</span> <span class="nf">XmlClient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">un_client</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retourne une chaîne de caractères qui représente le document XML de la liste des matériels du client passé en paramètre.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">un_client</span><span class="o">.</span><span class="n">le_contrat</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">liste_contrat</span> <span class="o">=</span> <span class="n">donnees</span><span class="o">.</span><span class="n">chargerDepuisBase</span><span class="p">(</span><span class="n">un_client</span><span class="o">.</span><span class="n">le_contrat</span><span class="o">.</span><span class="n">num_contrat</span><span class="p">,</span> <span class="s1">&#39;Contrat_Maintenance&#39;</span><span class="p">)</span>
+            <span class="n">un_contrat</span> <span class="o">=</span> <span class="n">ContratMaintenance</span><span class="o">.</span><span class="n">ContratMaintenance</span><span class="p">(</span><span class="n">liste_contrat</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">liste_contrat</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">liste_contrat</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">liste_contrat</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">un_contrat</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="n">liste_materiels</span> <span class="o">=</span> <span class="n">donnees</span><span class="o">.</span><span class="n">chargerDepuisBase</span><span class="p">(</span><span class="n">un_client</span><span class="o">.</span><span class="n">num_client</span><span class="p">,</span> <span class="s1">&#39;Materiel&#39;</span><span class="p">)</span>
+        
+        <span class="n">xml_version</span> <span class="o">=</span> <span class="s2">&quot;&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;&quot;</span>
+        <span class="n">entete</span> <span class="o">=</span> <span class="s1">&#39;&lt;listeMateriel&gt;&#39;</span>
+        <span class="n">materiel_id_client</span> <span class="o">=</span> <span class="s2">&quot;&lt;materiels idClient=</span><span class="se">\&#39;</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">un_client</span><span class="o">.</span><span class="n">num_client</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\&#39;</span><span class="s2"> &gt;&quot;</span>
+        <span class="n">sous_contrat</span> <span class="o">=</span> <span class="s2">&quot;&lt;sousContrat&gt;&quot;</span>
+        <span class="n">materiels_sous_contrat</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">materiels_hors_contrat</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">un_client</span><span class="o">.</span><span class="n">getMateriels</span><span class="p">())):</span>
+            <span class="k">if</span> <span class="n">un_client</span><span class="o">.</span><span class="n">getMateriels</span><span class="p">()[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">liste_le_type</span> <span class="o">=</span> <span class="n">donnees</span><span class="o">.</span><span class="n">chargerDepuisBase</span><span class="p">(</span><span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Type_Materiel&#39;</span><span class="p">)</span>
+                <span class="n">le_type</span> <span class="o">=</span> <span class="n">TypeMateriel</span><span class="o">.</span><span class="n">TypeMateriel</span><span class="p">(</span><span class="n">liste_le_type</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">liste_le_type</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">un_materiel</span> <span class="o">=</span> <span class="n">Materiels</span><span class="o">.</span><span class="n">Materiel</span><span class="p">(</span><span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span><span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span> <span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">],</span> <span class="n">le_type</span><span class="p">,</span> <span class="n">un_contrat</span><span class="p">)</span>
+                <span class="n">materiels_sous_contrat</span> <span class="o">+=</span> <span class="n">un_materiel</span><span class="o">.</span><span class="n">xmlMateriel</span><span class="p">()</span>
+        <span class="n">fin_sous_contrat</span> <span class="o">=</span> <span class="s2">&quot;&lt;/sousContrat&gt;&quot;</span>
+        <span class="n">hors_contrat</span> <span class="o">=</span> <span class="s2">&quot;&lt;horsContrat&gt;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">un_client</span><span class="o">.</span><span class="n">getMateriels</span><span class="p">())):</span>
+            <span class="k">if</span> <span class="n">un_client</span><span class="o">.</span><span class="n">getMateriels</span><span class="p">()[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">un_materiel</span> <span class="o">=</span> <span class="n">Materiels</span><span class="o">.</span><span class="n">Materiel</span><span class="p">(</span><span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span><span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span> <span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">],</span> <span class="n">TypeMateriel</span><span class="o">.</span><span class="n">TypeMateriel</span><span class="p">(</span><span class="n">donnees</span><span class="o">.</span><span class="n">chargerDepuisBase</span><span class="p">(</span><span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Type_Materiel&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">donnees</span><span class="o">.</span><span class="n">chargerDepuisBase</span><span class="p">(</span><span class="n">liste_materiels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Type_Materiel&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="n">un_contrat</span><span class="p">)</span>
+                <span class="n">materiels_hors_contrat</span> <span class="o">+=</span> <span class="n">un_materiel</span><span class="o">.</span><span class="n">xmlMateriel</span><span class="p">()</span>
+        <span class="n">fin_hors_contrat</span> <span class="o">=</span> <span class="s2">&quot;&lt;/horsContrat&gt;&quot;</span>
+        <span class="n">fin_materiel_id_client</span> <span class="o">=</span> <span class="s2">&quot;&lt;/materiels&gt;&quot;</span>
+        <span class="n">fin</span> <span class="o">=</span> <span class="s2">&quot;&lt;/listeMateriel&gt;&quot;</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">materiels_sous_contrat</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">materiels_hors_contrat</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>       
+            <span class="n">chaine_complete</span> <span class="o">=</span> <span class="n">xml_version</span> <span class="o">+</span> <span class="n">entete</span> <span class="o">+</span> <span class="n">materiel_id_client</span> <span class="o">+</span> <span class="n">sous_contrat</span> <span class="o">+</span> <span class="n">materiels_sous_contrat</span> <span class="o">+</span> <span class="n">fin_sous_contrat</span> <span class="o">+</span> <span class="n">hors_contrat</span> <span class="o">+</span> <span class="n">materiels_hors_contrat</span> <span class="o">+</span> <span class="n">fin_hors_contrat</span> <span class="o">+</span> <span class="n">fin_materiel_id_client</span> <span class="o">+</span> <span class="n">fin</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">materiels_sous_contrat</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">materiels_hors_contrat</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>  
+            <span class="n">chaine_complete</span> <span class="o">=</span> <span class="n">xml_version</span> <span class="o">+</span> <span class="n">entete</span> <span class="o">+</span> <span class="n">materiel_id_client</span> <span class="o">+</span> <span class="n">sous_contrat</span> <span class="o">+</span> <span class="n">materiels_sous_contrat</span> <span class="o">+</span> <span class="n">fin_sous_contrat</span> <span class="o">+</span> <span class="n">fin_materiel_id_client</span> <span class="o">+</span> <span class="n">fin</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">materiels_sous_contrat</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">materiels_hors_contrat</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> 
+            <span class="n">chaine_complete</span> <span class="o">=</span> <span class="n">xml_version</span> <span class="o">+</span> <span class="n">entete</span> <span class="o">+</span> <span class="n">materiel_id_client</span> <span class="o">+</span> <span class="n">hors_contrat</span> <span class="o">+</span> <span class="n">materiels_hors_contrat</span> <span class="o">+</span> <span class="n">fin_hors_contrat</span> <span class="o">+</span> <span class="n">fin_materiel_id_client</span> <span class="o">+</span> <span class="n">fin</span>
+             
+             
+        <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">chaine_complete</span><span class="p">)</span>
+        <span class="n">xml_p</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">tostring</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+        <span class="n">pretty_xml</span> <span class="o">=</span> <span class="n">xml_p</span><span class="o">.</span><span class="n">toprettyxml</span><span class="p">()</span>
+        
+        <span class="n">fichier_name</span> <span class="o">=</span> <span class="s2">&quot;materielClient&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">un_client</span><span class="o">.</span><span class="n">num_client</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.xml&quot;</span>
+        
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fichier_name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pretty_xml</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pretty_xml</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kevin COUTURIER.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
